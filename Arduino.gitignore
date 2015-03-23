@@ -1,0 +1,59 @@
+#include <IRremote.h>
+#include <Servo.h>
+ 
+ 
+int RECV_PIN = 11; //define input pin on Arduino
+ 
+ 
+ 
+IRrecv irrecv(RECV_PIN);
+decode_results results;
+Servo servo;  // create servo object to control a servo
+// a maximum of eight servo objects can be created
+ 
+int pos = 50;// variable to store the servo position
+int last = 4294967295;
+ 
+ 
+ 
+ 
+void setup()
+{
+  Serial.begin(9600);
+  irrecv.enableIRIn(); // Start the receiver
+ 
+  servo.attach(9);  // attaches the servo on pin 9 to the servo object
+  pinMode(13, OUTPUT);
+ 
+ 
+ 
+ 
+}
+void loop() {
+  if (irrecv.decode(&results)) {
+    Serial.println(results.value, DEC);
+    irrecv.resume(); // Receive the next value
+    if (results.value < last ) {
+      digitalWrite(13, HIGH);
+      delay(2000);
+      digitalWrite(13, LOW);
+      delay(300);
+      digitalWrite(13, HIGH);
+      delay(2000);
+      digitalWrite(13, LOW);
+      delay(300);
+      digitalWrite(13, HIGH);
+      delay(2000);
+ 
+      digitalWrite(13, LOW);
+      servo.write (0);
+      delay(1700);
+      servo.write(50);
+      delay(3000);
+ 
+ 
+    }
+ 
+ 
+  }
+}
